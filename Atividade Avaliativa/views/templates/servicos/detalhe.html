@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block title %}servico #{{ servico.id }}{% endblock %}
+
+{% block content %}
+<h1>servico #{{ servico.id }}</h1>
+
+<div class="info-box">
+    <p><strong>Cliente:</strong> {{ servico.cliente.nome }} ({{ servico.cliente.email }})</p>
+    <p>Dados do Cão</p>
+    <p><strong>Nome:</strong> {{ servico.nome_do_cao }}</p>
+    <p><strong>Raça:</strong> {{ servico.raca }}</p>
+    <p><strong>Peso:</strong> {{ servico.peso_do_cao }}</p>
+    <p><strong>Serviços:</strong> {{ servico.servicos }}</p>
+    <p><strong>Status:</strong> {{ servico.status }}</p>
+    <p><strong>Observação:</strong> {{ servico.observacao or '—' }}</p>
+    <p><strong>Criado em:</strong> {{ servico.data_criacao.strftime('%d/%m/%Y %H:%M') }}</p>
+    <p><strong>Atualizado em:</strong> {{ servico.data_atualizacao.strftime('%d/%m/%Y %H:%M') }}</p>
+</div>
+
+<h2>Itens</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Qtd</th>
+            <th>Preço unit.</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in servico.itens %}
+        <tr>
+            <td>{{ item.produto }}</td>
+            <td>{{ item.quantidade }}</td>
+            <td>R$ {{ "%.2f"|format(item.preco_unitario) }}</td>
+            {# item.subtotal é @property no Python — aqui no Jinja usa sem () mesmo #}
+            <td>R$ {{ "%.2f"|format(item.subtotal) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            {# servico.total também é @property — soma automática dos itens #}
+            <td colspan="3"><strong>Total</strong></td>
+            <td><strong>R$ {{ "%.2f"|format(servico.total) }}</strong></td>
+        </tr>
+    </tfoot>
+</table>
+
+<p><a href="{{ url_for('servicos.listar') }}">← Voltar aos servicos</a></p>
+{% endblock %}

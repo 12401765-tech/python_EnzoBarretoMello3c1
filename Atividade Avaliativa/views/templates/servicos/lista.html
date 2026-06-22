@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block title %}servicos{% endblock %}
+
+{% block content %}
+<h1>servicos</h1>
+<p><a class="btn" href="{{ url_for('servicos.cadastrar') }}">+ Novo servico</a></p>
+
+{% if servicos %}
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Status</th>
+            <th>Itens</th>
+            <th>Total</th>
+            <th>Data</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for servico in servicos %}
+        <tr>
+            <td>{{ servico.id }}</td>
+            <td>{{ servico.cliente.nome }}</td>
+            <td>{{ servico.status }}</td>
+            <td>{{ servico.itens|length }}</td>
+            <td>R$ {{ "%.2f"|format(servico.total) }}</td>
+            <td>{{ servico.data_criacao.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td><a href="{{ url_for('servicos.detalhe', servico_id=servico.id) }}">Ver</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="vazio">Nenhum servico cadastrado.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block title %}Painel — Aula 11{% endblock %}
+
+{% block content %}
+<h1>Painel de servicos</h1>
+<p class="subtitulo">Aula 11 — Superclasse abstrata + FK + MVC</p>
+
+<div class="cards">
+    <div class="card">
+        <span class="card-num">{{ total_clientes }}</span>
+        <span class="card-label">Clientes</span>
+    </div>
+    <div class="card">
+        <span class="card-num">{{ total_servicos }}</span>
+        <span class="card-label">servicos</span>
+    </div>
+</div>
+
+<h2>servicos recentes</h2>
+{% if servicos_recentes %}
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Criado em</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for servico in servicos_recentes %}
+        <tr>
+            <td><a href="{{ url_for('servicos.detalhe', servico_id=servico.id) }}">#{{ servico.id }}</a></td>
+            <td>{{ servico.cliente.nome }}</td>
+            <td>{{ servico.status }}</td>
+            <td>R$ {{ "%.2f"|format(servico.total) }}</td>
+            <td>{{ servico.data_criacao.strftime('%d/%m/%Y %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="vazio">Nenhum servico ainda.</p>
+{% endif %}
+{% endblock %}

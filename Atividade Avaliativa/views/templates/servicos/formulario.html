@@ -1,0 +1,131 @@
+{% extends "layout.html" %}
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<h1>{{ titulo }}</h1>
+
+{% if erro %}
+<p class="erro">{{ erro }}</p>
+{% endif %}
+
+{% if clientes %}
+<form method="POST" action="{{ url_for('servicos.cadastrar') }}">
+    <div class="form-grupo">
+        <label for="cliente_id">Cliente</label>
+        <select id="cliente_id" name="cliente_id" required>
+            <option value="">Selecione...</option>
+            {% for c in clientes %}
+            <option value="{{ c.id }}">{{ c.nome }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <h3>Itens do servico</h3>
+    <div id="itens">
+        <div class="item-linha">
+            <div class="Nome">
+            <h4>Nome do Cão</h4>
+            <input type="text" name="nome_do_cao" placeholder="Nome do cão" required>
+            </div>
+            <div class="Nome">
+                <h4>Raça do Cão</h4>
+                    <select name="raca" id="raca" placeholder="Selecione uma raça">
+                            <option value="beagle">Beagle</option>
+                            <option value="border-collie">Border Collie</option>
+                            <option value="boston-terrier">Boston Terrier</option>
+                            <option value="boxer">Boxer</option>
+                            <option value="bulldog-frances">Bulldog Francês</option>
+                            <option value="bulldog-ingles">Bulldog Inglês</option>
+                            <option value="chihuahua">Chihuahua</option>
+                            <option value="chow-chow">Chow Chow</option>
+                            <option value="cocker-spaniel">Cocker Spaniel</option>
+                            <option value="dachshund">Dachshund (Salsicha)</option>
+                            <option value="golden-retriever">Golden Retriever</option>
+                            <option value="husky-siberiano">Husky Siberiano</option>
+                            <option value="labrador">Labrador Retriever</option>
+                            <option value="maltes">Maltês</option>
+                            <option value="pastor-alemao">Pastor Alemão</option>
+                            <option value="pinscher">Pinscher</option>
+                            <option value="poodle">Poodle</option>
+                            <option value="pug">Pug</option>
+                            <option value="rottweiler">Rottweiler</option>
+                            <option value="shih-tzu">Shih Tzu</option>
+                            <option value="srd">Sem Raça Definida (Vira-lata)</option>                       
+                    </select>
+            </div>
+            <div class="Nome">
+                <h4>Peso do Cão</h4>
+                    <input type="number" name="peso_do_cao" placeholder="Peso do cão" min="1" value="" required>
+            </div>
+            <div class="Nome">
+                <h4>Serviço</h4>
+                    <select name="servicos" id="servicos" placeholder="Selecione um serviço" value="">
+                        <option value="banho">Banho</option>
+                        <option value="banho-medicinal">Banho Medicinal / Terapêutico</option>
+                        <option value="corte-unhas">Corte de Unhas</option>
+                        <option value="creche">Creche (Daycare)</option>
+                        <option value="escovacao-dentes">Escovação Dentária</option>
+                        <option value="hospedagem">Hospedagem (Hotelzinho)</option>
+                        <option value="hidratacao-pelagem">Hidratação de Pelagem</option>
+                        <option value="limpeza-ouvidos">Limpeza de Ouvidos</option>
+                        <option value="pet-sitting">Pet Sitting (Cuidador em Domicílio)</option>
+                        <option value="pintura-pelagem">Pintura Criativa da Pelagem</option>
+                        <option value="penteados">Penteados e Acessórios</option>
+                        <option value="consulta-veterinaria">Primeira Consulta Veterinária</option>
+                        <option value="remove-subpelo">Remoção de Subpelo (Desembolo)</option>
+                        <option value="taxi-dog">Táxi Dog (Leva e Traz)</option>
+                        <option value="tosa-higienica">Tosa Higiênica</option>
+                        <option value="tosa-maquina">Tosa na Máquina</option>
+                        <option value="tosa-tesoura">Tosa na Tesoura</option>
+                        <option value="tosa-raca">Tosa Específica da Raça</option>
+                        <option value="vacinacao">Vacinação</option>
+                    </select>
+                    <button type="button" onclick="adicionarLinha()">+ Serviço</button>
+            </div>
+              <div class="Nome">
+                <h4>Nome do Cão</h4>
+            <input type="text" id="observacao" name="observacao" value="{{ observacao or '' }}" placeholder="Observações">
+        </div>
+    </div>
+    <button type="submit">Calcular Valor total</button> 
+    <div>{{valor_total}}</div>
+    <br><br>
+    <button type="submit">Salvar servico</button>
+</form>
+{% endif %}
+
+<p><a href="{{ url_for('servicos.listar') }}">← Voltar</a></p>
+
+<script>
+function adicionarLinha() {
+    const div = document.createElement('div');
+    div.className = 'item-linha';
+    div.innerHTML = `
+        <div class="Nome">
+                    <select name="servicos" id="servicos" placeholder="Selecione um serviço" value="">
+                        <option value="banho">Banho</option>
+                        <option value="banho-medicinal">Banho Medicinal / Terapêutico</option>
+                        <option value="corte-unhas">Corte de Unhas</option>
+                        <option value="creche">Creche (Daycare)</option>
+                        <option value="escovacao-dentes">Escovação Dentária</option>
+                        <option value="hospedagem">Hospedagem (Hotelzinho)</option>
+                        <option value="hidratacao-pelagem">Hidratação de Pelagem</option>
+                        <option value="limpeza-ouvidos">Limpeza de Ouvidos</option>
+                        <option value="pet-sitting">Pet Sitting (Cuidador em Domicílio)</option>
+                        <option value="pintura-pelagem">Pintura Criativa da Pelagem</option>
+                        <option value="penteados">Penteados e Acessórios</option>
+                        <option value="consulta-veterinaria">Primeira Consulta Veterinária</option>
+                        <option value="remove-subpelo">Remoção de Subpelo (Desembolo)</option>
+                        <option value="taxi-dog">Táxi Dog (Leva e Traz)</option>
+                        <option value="tosa-higienica">Tosa Higiênica</option>
+                        <option value="tosa-maquina">Tosa na Máquina</option>
+                        <option value="tosa-tesoura">Tosa na Tesoura</option>
+                        <option value="tosa-raca">Tosa Específica da Raça</option>
+                        <option value="vacinacao">Vacinação</option>
+                    </select>
+            </div>
+    `;
+    document.getElementById('itens').appendChild(div);
+}
+</script>
+{% endblock %}
